@@ -1,0 +1,68 @@
+<div class="container section">
+  <h1 class="headline-lg">My Orders</h1>
+  <p class="body-md" style="color:var(--on-surface-variant);margin-bottom:24px">{{ orders.length }} order{{ orders.length !== 1 ? 's' : '' }}</p>
+
+  <div class="orders-list">
+    @for (order of orders; track order.orderId) {
+      <div class="card order-card" [class.expanded]="expandedOrderId === order.orderId">
+        <div class="order-header" (click)="toggleExpand(order.orderId)">
+          <div class="order-id-date">
+            <span class="order-id">#{{ order.orderId }}</span>
+            <span class="order-date">{{ order.orderDate | date:'mediumDate' }}</span>
+          </div>
+          <div class="order-summary">
+            <span class="order-amount">₹{{ order.amountPaid }}</span>
+            <span class="status-chip" [class]="getStatusClass(order.orderStatus)">{{ order.orderStatus }}</span>
+            <span class="material-symbols-outlined expand-icon" [class.rotated]="expandedOrderId === order.orderId">expand_more</span>
+          </div>
+        </div>
+
+        @if (expandedOrderId === order.orderId) {
+          <div class="order-body">
+            <div class="order-details-grid">
+              <div class="detail-item">
+                <span class="detail-label">Product</span>
+                <span class="detail-value">{{ order.productName || 'Book' }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Quantity</span>
+                <span class="detail-value">{{ order.quantity }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Payment</span>
+                <span class="detail-value">{{ order.modeOfPayment }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Total</span>
+                <span class="detail-value price">₹{{ order.amountPaid }}</span>
+              </div>
+              <div class="detail-item" style="grid-column: span 2">
+                <span class="detail-label">Shipping Address</span>
+                <span class="detail-value">{{ order.fullName }}, {{ order.flatNumber }}, {{ order.city }}, {{ order.state }} — {{ order.pincode }}</span>
+              </div>
+            </div>
+
+            <div class="order-actions">
+              @if (order.orderStatus === 'PLACED' || order.orderStatus === 'CONFIRMED') {
+                <button class="btn btn-outline btn-cancel" (click)="cancel(order)">
+                  <span class="material-symbols-outlined">cancel</span> Cancel Order
+                </button>
+              }
+              <button class="btn btn-outline btn-invoice" (click)="downloadInvoice(order)">
+                <span class="material-symbols-outlined">receipt_long</span> Download Invoice
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  @if (orders.length === 0) {
+    <div class="empty-state">
+      <span class="material-symbols-outlined" style="font-size:64px;color:var(--outline)">receipt_long</span>
+      <p class="body-lg" style="margin-top:12px">No orders yet</p>
+      <p class="body-md" style="color:var(--on-surface-variant)">Start shopping to see your orders here</p>
+    </div>
+  }
+</div>

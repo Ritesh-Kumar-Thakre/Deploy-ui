@@ -1,0 +1,82 @@
+.section {
+  padding: 32px 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.notif-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.notif-card:hover {
+  background: var(--surface-container-low);
+}
+
+.notif-card.unread {
+  border-left: 3px solid var(--primary);
+  background: var(--primary-fixed);
+}
+
+.notif-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--surface-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notif-icon .material-symbols-outlined {
+  font-size: 20px;
+  color: var(--primary);
+}
+
+.notif-content {
+  flex: 1;
+}
+
+.notif-content p {
+  margin: 4px 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 0;
+}
+
+@media (max-width: 768px) {
+  .notif-card {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .notif-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 360px) {
+  .notif-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

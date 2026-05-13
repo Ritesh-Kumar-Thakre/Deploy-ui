@@ -1,0 +1,32 @@
+<div class="container section">
+  <h1 class="headline-lg">My Wishlist</h1>
+  <div class="wishlist-grid">
+    @for (item of items; track item.id) {
+      <div class="card wish-card">
+        <div class="wish-cover">
+          @if (item.coverImageUrl) { <img [src]="item.coverImageUrl" [alt]="item.bookTitle" referrerpolicy="no-referrer"> }
+          @else { <div class="cover-placeholder"><span class="material-symbols-outlined">book</span></div> }
+        </div>
+        <div class="wish-info">
+          <a [routerLink]="['/books', item.bookId]" class="label-md">{{ item.bookTitle }}</a>
+          <p class="price">₹{{ item.price }}</p>
+          <div class="wish-actions">
+            <button class="btn btn-primary" style="padding:8px 16px;font-size:13px" (click)="moveToCart(item)">
+              <span class="material-symbols-outlined" style="font-size:16px">shopping_cart</span> Move to Cart
+            </button>
+            <button class="btn-remove" (click)="remove(item)" title="Remove from wishlist">
+              <span class="material-symbols-outlined" style="font-size:20px">delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  @if (items.length === 0) {
+    <div class="empty-state">
+      <span class="material-symbols-outlined" style="font-size:64px;color:var(--outline)">favorite</span>
+      <h2 class="headline-md" style="margin:16px 0 8px">Wishlist is empty</h2>
+      <a routerLink="/books" class="btn btn-primary" style="margin-top:24px">Browse Books</a>
+    </div>
+  }
+</div>

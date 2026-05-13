@@ -1,0 +1,31 @@
+<div class="container section">
+  <div class="section-header">
+    <h1 class="headline-lg">Notifications</h1>
+    @if (notifications.length > 0) {
+      <button class="btn btn-ghost" (click)="markAllRead()">Mark all as read</button>
+    }
+  </div>
+  <div class="notif-list">
+    @for (n of notifications; track n.id) {
+      <div class="card notif-card" [class.unread]="!n.isRead" (click)="markRead(n)">
+        <div class="notif-icon">
+          <span class="material-symbols-outlined">{{ getIcon(n.type) }}</span>
+        </div>
+        <div class="notif-content">
+          <h3 class="label-md">{{ n.title }}</h3>
+          <p class="body-md">{{ n.message }}</p>
+          <span class="label-sm" style="color:var(--on-surface-variant)">{{ n.createdAt | date:'medium' }}</span>
+        </div>
+        <button class="btn btn-ghost" style="padding:4px" (click)="remove(n); $event.stopPropagation()">
+          <span class="material-symbols-outlined" style="font-size:18px;color:var(--outline)">close</span>
+        </button>
+      </div>
+    }
+  </div>
+  @if (notifications.length === 0) {
+    <div class="empty-state">
+      <span class="material-symbols-outlined" style="font-size:64px;color:var(--outline)">notifications_none</span>
+      <p class="body-lg">No notifications</p>
+    </div>
+  }
+</div>

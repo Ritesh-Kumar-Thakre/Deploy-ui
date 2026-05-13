@@ -1,0 +1,123 @@
+<div class="dashboard-header">
+  <div>
+    <h2 class="headline-lg">Overview</h2>
+    <p class="body-md">Welcome back. Here's what's happening today.</p>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+  <!-- Sales -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <div class="kpi-icon sales"><span class="material-symbols-outlined">payments</span></div>
+    </div>
+    <div class="kpi-content">
+      <p class="kpi-label">Total Sales</p>
+      <h3 class="kpi-value">{{ totalSales | currency:'INR' }}</h3>
+    </div>
+  </div>
+
+  <!-- Orders -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <div class="kpi-icon orders"><span class="material-symbols-outlined">shopping_bag</span></div>
+    </div>
+    <div class="kpi-content">
+      <p class="kpi-label">Total Orders</p>
+      <h3 class="kpi-value">{{ totalOrders }}</h3>
+    </div>
+  </div>
+
+  <!-- Users -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <div class="kpi-icon users"><span class="material-symbols-outlined">group</span></div>
+    </div>
+    <div class="kpi-content">
+      <p class="kpi-label">Active Users</p>
+      <h3 class="kpi-value">{{ activeUsers }}</h3>
+    </div>
+  </div>
+
+  <!-- Catalog -->
+  <div class="kpi-card">
+    <div class="kpi-header">
+      <div class="kpi-icon catalog"><span class="material-symbols-outlined">library_books</span></div>
+    </div>
+    <div class="kpi-content">
+      <p class="kpi-label">Books in Catalog</p>
+      <h3 class="kpi-value">{{ totalBooks }}</h3>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <!-- Recent Orders Table -->
+  <div class="card table-card" style="grid-column: span 2;">
+    <div class="card-header">
+      <h3 class="headline-md">Recent Orders</h3>
+    </div>
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer ID</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of recentOrders; track order.orderId) {
+          <tr>
+            <td><strong>#ORD-{{ order.orderId }}</strong></td>
+            <td>User {{ order.userId }}</td>
+            <td>{{ order.orderDate | date:'shortDate' }}</td>
+            <td><strong>{{ order.amountPaid | currency:'INR' }}</strong></td>
+            <td>
+              <span class="status-badge" [class]="(order.orderStatus || '').toLowerCase()">
+                {{ order.orderStatus || 'PENDING' }}
+              </span>
+            </td>
+          </tr>
+          }
+          @if (recentOrders.length === 0) {
+          <tr>
+            <td colspan="5" class="empty-cell">No recent orders</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Low Stock Alerts -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="headline-md"><span class="material-symbols-outlined text-warning">warning</span> Low Stock Alerts</h3>
+    </div>
+    <div class="card-body p-0">
+      <ul class="stock-list">
+        @for (book of lowStockBooks; track book.bookId) {
+        <li>
+          <div class="stock-item-img">
+            @if (book.coverImageUrl) { <img [src]="book.coverImageUrl" [alt]="book.title" referrerpolicy="no-referrer">
+            }
+            @else { <span class="material-symbols-outlined">menu_book</span> }
+          </div>
+          <div class="stock-item-info">
+            <h4>{{ book.title }}</h4>
+            <p>{{ book.author }}</p>
+            <span class="stock-badge" [class.critical]="book.stock < 5">{{ book.stock }} left</span>
+          </div>
+        </li>
+        }
+        @if (lowStockBooks.length === 0) {
+        <li class="empty-cell">Inventory looks good</li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>

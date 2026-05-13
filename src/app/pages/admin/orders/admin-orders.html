@@ -1,0 +1,60 @@
+<div class="page-header">
+  <div>
+    <h2 class="headline-lg">Order Management</h2>
+    <p class="body-md text-muted">View all orders and update their fulfillment status.</p>
+  </div>
+</div>
+
+<div class="card table-card">
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Shipping Address</th>
+          <th style="text-align: right;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders; track order.orderId) {
+          <tr>
+            <td><strong>#ORD-{{ order.orderId }}</strong></td>
+            <td>
+              <div style="font-weight: 500;">{{ order.fullName || ('User ' + order.userId) }}</div>
+            </td>
+            <td>
+              <div style="color: var(--on-surface-variant);">{{ order.orderDate | date:'mediumDate' }}</div>
+            </td>
+            <td><strong>{{ order.amountPaid | currency:'INR' }}</strong></td>
+            <td>
+              <div class="address-cell">
+                @if (order.flatNumber || order.city) {
+                  {{ order.flatNumber }}, {{ order.city }}<br>
+                  {{ order.state }}, {{ order.pincode }}
+                } @else {
+                  <span class="text-muted">No address</span>
+                }
+              </div>
+            </td>
+            <td style="text-align: right;">
+              <select class="status-select" [class]="(order.orderStatus || '').toLowerCase()" (change)="updateStatus(order.orderId, $event)">
+                @for (s of statuses; track s) {
+                  <option [value]="s" [selected]="order.orderStatus === s">{{ s }}</option>
+                }
+              </select>
+            </td>
+          </tr>
+        }
+        @if (!loading && orders.length === 0) {
+          <tr><td colspan="6" class="empty-cell">No orders found</td></tr>
+        }
+        @if (loading) {
+          <tr><td colspan="6" class="empty-cell">Loading orders...</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

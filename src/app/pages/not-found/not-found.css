@@ -1,0 +1,18 @@
+.not-found-page {
+  text-align: center;
+  padding: 80px 0;
+}
+.not-found-page h1 {
+  margin: 16px 0;
+}
+
+@media (max-width: 480px) {
+  .not-found-page {
+    padding: 40px 16px;
+  }
+}
+@media (max-width: 360px) {
+  .not-found-page h1 {
+    font-size: 24px;
+  }
+}

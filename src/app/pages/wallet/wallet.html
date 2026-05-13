@@ -1,0 +1,97 @@
+<div class="container section">
+  <h1 class="headline-lg">My Wallet</h1>
+  <div class="wallet-grid">
+    <div class="card wallet-card">
+      <div class="balance-section">
+        <p class="label-md" style="color:var(--on-surface-variant)">Available Balance</p>
+        <p class="headline-xl" style="color:var(--primary)">₹{{ wallet?.currentBalance || 0 }}</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="wallet-tabs">
+        <button class="wallet-tab" [class.active]="activeTab === 'topup'" (click)="activeTab = 'topup'">
+          <span class="material-symbols-outlined">add_circle</span> Add Money
+        </button>
+        <button class="wallet-tab" [class.active]="activeTab === 'withdraw'" (click)="activeTab = 'withdraw'">
+          <span class="material-symbols-outlined">output</span> Withdraw
+        </button>
+      </div>
+
+      <!-- Add Money Tab -->
+      @if (activeTab === 'topup') {
+        <div class="topup-section">
+          <div class="topup-row">
+            <input type="number" class="form-input" [(ngModel)]="amount" placeholder="Enter amount" min="1" max="50000">
+          </div>
+          <div class="quick-amounts">
+            @for (a of [500, 1000, 2000, 5000]; track a) {
+              <button class="chip" (click)="amount = a">₹{{ a }}</button>
+            }
+          </div>
+          <div class="razorpay-section">
+            <button class="btn btn-razorpay" (click)="payViaRazorpay()" [disabled]="!amount || amount < 1 || razorpayLoading">
+              @if (razorpayLoading) {
+                <span class="spinner-sm"></span>
+                Processing…
+              } @else {
+                <span class="material-symbols-outlined">account_balance</span>
+                Pay ₹{{ amount || '—' }} via Razorpay / UPI
+              }
+            </button>
+            <p class="razorpay-note">Supports UPI, Cards, NetBanking & Wallets</p>
+          </div>
+        </div>
+      }
+
+      <!-- Withdraw Tab -->
+      @if (activeTab === 'withdraw') {
+        <div class="withdraw-section">
+          <p class="withdraw-info">
+            <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle">info</span>
+            Withdrawn amount will be credited to your linked bank account.
+          </p>
+          <div class="topup-row">
+            <input type="number" class="form-input" [(ngModel)]="withdrawAmount" placeholder="Enter amount to withdraw" min="1" [max]="wallet?.currentBalance || 0">
+          </div>
+          <div class="quick-amounts">
+            @for (a of [500, 1000, 2000]; track a) {
+              @if (a <= (wallet?.currentBalance || 0)) {
+                <button class="chip" (click)="withdrawAmount = a">₹{{ a }}</button>
+              }
+            }
+            @if ((wallet?.currentBalance || 0) > 0) {
+              <button class="chip chip-all" (click)="withdrawAmount = wallet.currentBalance">All ₹{{ wallet.currentBalance }}</button>
+            }
+          </div>
+          <button class="btn btn-withdraw" (click)="withdraw()" [disabled]="!withdrawAmount || withdrawAmount < 1 || withdrawAmount > (wallet?.currentBalance || 0)">
+            <span class="material-symbols-outlined">output</span>
+            Withdraw ₹{{ withdrawAmount || '—' }}
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="card" style="padding:24px">
+      <h3 class="headline-md" style="margin-bottom:16px">Transaction History</h3>
+      @for (s of statements; track s.statementId) {
+        <div class="txn-row">
+          <div class="txn-info">
+            <span class="txn-type-icon material-symbols-outlined" [class.credit]="(s.transactionType || '').toUpperCase() === 'DEPOSIT' || (s.transactionType || '').toUpperCase() === 'REFUND'" [class.debit]="(s.transactionType || '').toUpperCase() === 'WITHDRAW' || (s.transactionType || '').toUpperCase() === 'PAYMENT'">
+              {{ (s.transactionType || '').toUpperCase() === 'DEPOSIT' || (s.transactionType || '').toUpperCase() === 'REFUND' ? 'arrow_downward' : 'arrow_upward' }}
+            </span>
+            <div>
+              <p class="label-md">{{ s.transactionRemarks || s.description || s.transactionType }}</p>
+              <p class="label-sm" style="color:var(--on-surface-variant)">{{ s.dateTime | date:'medium' }}</p>
+            </div>
+          </div>
+          <span class="txn-amount" [class.credit]="(s.transactionType || '').toUpperCase() === 'DEPOSIT' || (s.transactionType || '').toUpperCase() === 'REFUND'" [class.debit]="(s.transactionType || '').toUpperCase() === 'WITHDRAW' || (s.transactionType || '').toUpperCase() === 'PAYMENT'">
+            {{ (s.transactionType || '').toUpperCase() === 'DEPOSIT' || (s.transactionType || '').toUpperCase() === 'REFUND' ? '+' : '-' }}₹{{ s.amount }}
+          </span>
+        </div>
+      }
+      @if (statements.length === 0) {
+        <p class="body-md" style="color:var(--on-surface-variant);text-align:center;padding:32px 0">No transactions yet</p>
+      }
+    </div>
+  </div>
+</div>

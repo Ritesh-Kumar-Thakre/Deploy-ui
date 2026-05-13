@@ -1,0 +1,75 @@
+<div class="container section">
+  <div class="page-header">
+    <div>
+      <h2 class="headline-lg">Seller Dashboard</h2>
+      <p class="body-md text-muted">Submit new books for approval by an administrator.</p>
+    </div>
+  </div>
+
+  <div class="card" style="max-width: 800px; margin: 0 auto; padding: 32px;">
+    <form (ngSubmit)="saveBook()" #bookForm="ngForm" class="form-grid">
+      <div class="form-group" style="grid-column: span 2;">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" [(ngModel)]="newBook.title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Author</label>
+        <input type="text" class="form-input" [(ngModel)]="newBook.author" name="author" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Genre</label>
+        <select class="form-input" [(ngModel)]="newBook.genre" name="genre" required>
+          @for (g of genres; track g) {
+            <option [value]="g">{{ g }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Price (₹)</label>
+        <input type="number" class="form-input" [(ngModel)]="newBook.price" name="price" required min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Initial Stock</label>
+        <input type="number" class="form-input" [(ngModel)]="newBook.stock" name="stock" required min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ISBN</label>
+        <input type="text" class="form-input" [(ngModel)]="newBook.isbn" name="isbn">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Publisher</label>
+        <input type="text" class="form-input" [(ngModel)]="newBook.publisher" name="publisher">
+      </div>
+      <div class="form-group" style="grid-column: span 2;">
+        <label class="form-label">Cover Image URL (optional)</label>
+        <input type="text" class="form-input" [(ngModel)]="newBook.coverImageUrl" name="coverImageUrl" placeholder="Paste an image URL or upload files below">
+      </div>
+      <div class="form-group" style="grid-column: span 2;">
+        <label class="form-label">Upload Images (multiple allowed)</label>
+        <input type="file" class="form-input" accept="image/*" multiple (change)="onFilesSelected($event)" style="padding: 8px;">
+        @if (imagePreviewUrls.length > 0) {
+          <div class="image-previews">
+            @for (url of imagePreviewUrls; track url; let i = $index) {
+              <div class="preview-item">
+                <img [src]="url" alt="Preview">
+                <button type="button" class="remove-btn" (click)="removeImage(i)" title="Remove">×</button>
+                @if (i === 0) {
+                  <span class="primary-badge">Cover</span>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <div class="form-group" style="grid-column: span 2;">
+        <label class="form-label">Description</label>
+        <textarea class="form-input" [(ngModel)]="newBook.description" name="description" rows="4"></textarea>
+      </div>
+      <div class="form-group" style="grid-column: span 2; margin-top: 16px;">
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;" [disabled]="!bookForm.form.valid || uploading">
+          {{ uploading ? 'Uploading...' : 'Submit Book for Verification' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,89 @@
+<div class="admin-container">
+  <!-- SideNavBar -->
+  <nav class="admin-sidebar">
+    <div class="sidebar-header">
+      <span class="material-symbols-outlined" style="font-size: 28px;">auto_stories</span>
+      <div>
+        <h1>BookNest</h1>
+        <p>Admin Console</p>
+      </div>
+    </div>
+
+    <div class="sidebar-links">
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="link-text">Dashboard</span>
+      </a>
+      <a routerLink="/admin/books" routerLinkActive="active">
+        <span class="material-symbols-outlined">menu_book</span>
+        <span class="link-text">Book Management</span>
+      </a>
+      <a routerLink="/admin/verification" routerLinkActive="active">
+        <span class="material-symbols-outlined">fact_check</span>
+        <span class="link-text">Verification</span>
+      </a>
+      <a routerLink="/admin/orders" routerLinkActive="active">
+        <span class="material-symbols-outlined">shopping_cart</span>
+        <span class="link-text">Orders</span>
+      </a>
+      <a routerLink="/admin/users" routerLinkActive="active">
+        <span class="material-symbols-outlined">group</span>
+        <span class="link-text">Users</span>
+      </a>
+      <a routerLink="/admin/reviews" routerLinkActive="active">
+        <span class="material-symbols-outlined">reviews</span>
+        <span class="link-text">Reviews</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <a (click)="onLogout()" class="logout-btn">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="link-text">Logout</span>
+      </a>
+      <a routerLink="/" class="back-btn" style="margin-top: 8px;">
+        <span class="material-symbols-outlined">storefront</span>
+        <span class="link-text">Storefront</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content Wrapper -->
+  <div class="admin-main">
+    <!-- TopAppBar -->
+    <header class="admin-header">
+      <div class="search-bar">
+        <!-- We can add search functionality later -->
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" routerLink="/notifications">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <div class="divider"></div>
+        <div class="admin-profile">
+          <div class="avatar">A</div>
+          <div class="info">
+            <p class="name">Admin User</p>
+            <p class="role">Superadmin</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Canvas -->
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+      
+      <div class="mobile-admin-footer">
+        <a (click)="onLogout()" class="logout-btn">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="link-text">Logout</span>
+        </a>
+        <a routerLink="/" class="back-btn">
+          <span class="material-symbols-outlined">storefront</span>
+          <span class="link-text">Storefront</span>
+        </a>
+      </div>
+    </main>
+  </div>
+</div>

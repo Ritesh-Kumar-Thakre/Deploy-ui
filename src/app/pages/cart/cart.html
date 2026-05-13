@@ -1,0 +1,36 @@
+<div class="container section">
+    <h1 class="headline-lg">Shopping Cart</h1>@if (cart && cart.items?.length > 0) { <div class="cart-layout">
+        <div class="cart-items">@for (item of cart.items; track item.itemId) { <div class="cart-item card">
+                <div class="item-cover">@if (item.coverImageUrl) { <img [src]="item.coverImageUrl"
+                        [alt]="item.bookTitle" referrerpolicy="no-referrer"> } @else { <div class="cover-placeholder">
+                        <span class="material-symbols-outlined">book</span></div> }</div>
+                <div class="item-details">
+                    <h3 class="label-md">{{ item.bookTitle }}</h3>
+                    <p class="label-sm" style="color:var(--on-surface-variant)">{{ item.author }}</p>
+                    <p class="price">₹{{ item.price }}</p>
+                </div>
+                <div class="item-qty"><button class="qty-btn" (click)="updateQty(item, -1)"
+                        [disabled]="item.quantity <= 1">−</button><span>{{ item.quantity }}</span><button
+                        class="qty-btn" (click)="updateQty(item, 1)">+</button></div>
+                <div class="item-total">
+                    <p class="label-md">₹{{ item.price * item.quantity }}</p><button class="btn btn-ghost"
+                        style="color:var(--error);padding:4px 8px" (click)="removeItem(item)"><span
+                            class="material-symbols-outlined">delete</span></button>
+                </div>
+            </div> }</div>
+        <div class="cart-summary card">
+            <h3 class="headline-md">Order Summary</h3>
+            <div class="summary-row"><span>Subtotal</span><span>₹{{ cart.totalPrice }}</span></div>
+            <div class="summary-row"><span>Items</span><span>{{ cart.items.length }}</span></div>
+            <hr>
+            <div class="summary-row total"><span>Total</span><span>₹{{ cart.totalPrice }}</span></div><a
+                routerLink="/checkout" class="btn btn-primary" style="width:100%;padding:14px;margin-top:16px">Proceed
+                to Checkout</a>
+        </div>
+    </div> } @else { <div class="empty-state"><span class="material-symbols-outlined"
+            style="font-size:80px;color:var(--outline)">shopping_cart</span>
+        <h2 class="headline-md" style="margin:16px 0 8px">Your cart is empty</h2>
+        <p class="body-md" style="color:var(--on-surface-variant)">Browse our collection and add some books!</p><a
+            routerLink="/books" class="btn btn-primary" style="margin-top:24px">Browse Books</a>
+    </div> }
+</div>

@@ -1,0 +1,55 @@
+<div class="admin-section">
+  <div class="section-header">
+    <h2 class="headline-md">Review Management</h2>
+    <p class="body-md" style="color:var(--on-surface-variant)">{{ reviews.length }} total reviews</p>
+  </div>
+
+  <div class="reviews-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Reviewer</th>
+          <th>Rating</th>
+          <th>Comment</th>
+          <th>Book ID</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of reviews; track r.reviewId) {
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="avatar-sm">{{ getInitial(r.reviewerName) }}</div>
+                <span>{{ r.reviewerName || 'Anonymous' }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="stars-row">
+                @for (s of [1,2,3,4,5]; track s) {
+                  <span class="material-symbols-outlined" [style.font-variation-settings]="getRatingFill(s, r.rating)" style="font-size:16px;color:#f59e0b">star</span>
+                }
+              </div>
+            </td>
+            <td class="comment-cell">{{ r.comment }}</td>
+            <td>#{{ r.bookId }}</td>
+            <td>{{ r.createdAt | date:'shortDate' }}</td>
+            <td>
+              <button class="btn-delete-sm" (click)="deleteReview(r.reviewId)" title="Delete review">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (reviews.length === 0) {
+    <div class="empty-state">
+      <span class="material-symbols-outlined" style="font-size:48px;color:var(--outline)">reviews</span>
+      <p>No reviews yet</p>
+    </div>
+  }
+</div>

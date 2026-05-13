@@ -1,0 +1,79 @@
+/* Footer — Matching Deep Navy */
+.footer {
+  background: linear-gradient(180deg, #0d1f3c 0%, #091528 100%);
+  color: var(--primary-fixed-dim);
+  margin-top: 40px;
+}
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+  padding: 48px 0;
+}
+.footer-brand .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--on-primary);
+  margin-bottom: 12px;
+}
+.footer-brand .logo .material-symbols-outlined {
+  color: var(--secondary-container);
+}
+.footer-brand p {
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 300px;
+}
+.footer-links h4 {
+  color: var(--on-primary);
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.footer-links a {
+  display: block;
+  font-size: 14px;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.footer-links a:hover {
+  color: var(--secondary-container);
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px 0;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .footer-content {
+    gap: 32px;
+  }
+}
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: center;
+  }
+  .footer-brand p {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .footer-brand .logo {
+    justify-content: center;
+  }
+}
+@media (max-width: 480px) {
+  .footer-content {
+    padding: 32px 0;
+    gap: 24px;
+  }
+  .footer-bottom {
+    font-size: 11px;
+  }
+}

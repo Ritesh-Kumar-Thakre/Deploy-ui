@@ -1,0 +1,56 @@
+<div class="page-header">
+  <div>
+    <h2 class="headline-lg">User Management</h2>
+    <p class="body-md text-muted">View registered customers, manage their roles, and moderate accounts.</p>
+  </div>
+</div>
+
+<div class="card table-card">
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Email / Contact</th>
+          <th>Role</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track user.userId) {
+          <tr>
+            <td><strong>{{ user.userId }}</strong></td>
+            <td>
+              <div style="font-weight: 500;">{{ user.fullName || 'N/A' }}</div>
+            </td>
+            <td>
+              <div style="color: var(--on-surface);">{{ user.email }}</div>
+              <div style="font-size: 12px; color: var(--on-surface-variant);">{{ user.mobile || 'No mobile' }}</div>
+            </td>
+            <td>
+              <select class="role-select" [value]="user.role" (change)="changeRole(user.userId, $event)">
+                <option value="CUSTOMER">CUSTOMER</option>
+                <option value="SELLER">SELLER</option>
+                <option value="ADMIN">ADMIN</option>
+              </select>
+            </td>
+            <td style="text-align: right;">
+              @if (user.role !== 'ADMIN') {
+                <button class="icon-btn delete-btn" (click)="deleteUser(user.userId)" title="Delete user">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              }
+            </td>
+          </tr>
+        }
+        @if (!loading && users.length === 0) {
+          <tr><td colspan="5" class="empty-cell">No users found</td></tr>
+        }
+        @if (loading) {
+          <tr><td colspan="5" class="empty-cell">Loading users...</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,160 @@
+<div class="page-header">
+  <div>
+    <h2 class="headline-lg">Book Management</h2>
+    <p class="body-md text-muted">Manage your library inventory, track stock, and update listings.</p>
+  </div>
+  <button class="btn btn-primary" (click)="openAddModal()">
+    <span class="material-symbols-outlined">add</span> Add New Book
+  </button>
+</div>
+
+<div class="card table-card">
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Cover</th>
+          <th>Title & Author</th>
+          <th>Genre</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (book of books; track book.bookId) {
+        <tr>
+          <td>
+            <div class="table-img">
+              @if (book.coverImageUrl) { <img [src]="book.coverImageUrl" [alt]="book.title"
+                referrerpolicy="no-referrer"> }
+              @else { <span class="material-symbols-outlined">menu_book</span> }
+            </div>
+          </td>
+          <td>
+            <strong>{{ book.title }}</strong><br>
+            <span class="text-muted" style="font-size: 12px;">{{ book.author }}</span>
+          </td>
+          <td><span class="badge">{{ book.genre || 'N/A' }}</span></td>
+          <td><strong>{{ book.price | currency:'INR' }}</strong></td>
+          <td>
+            <div class="stock-indicator">
+              <div class="dot" [class.success]="book.stock > 10" [class.warning]="book.stock > 0 && book.stock <= 10"
+                [class.error]="book.stock === 0"></div>
+              <span [style.color]="book.stock === 0 ? '#ef4444' : 'inherit'"
+                [style.fontWeight]="book.stock === 0 ? '700' : '500'">
+                {{ book.stock === 0 ? 'Out of Stock' : book.stock + ' left' }}
+              </span>
+            </div>
+          </td>
+          <td style="text-align: right;">
+            <button class="icon-btn edit-btn" (click)="openEditModal(book)"><span
+                class="material-symbols-outlined">edit</span></button>
+            <button class="icon-btn delete-btn" (click)="deleteBook(book.bookId)"><span
+                class="material-symbols-outlined">delete</span></button>
+          </td>
+        </tr>
+        }
+        @if (!loading && books.length === 0) {
+        <tr>
+          <td colspan="6" class="empty-cell">No books found in inventory</td>
+        </tr>
+        }
+        @if (loading) {
+        <tr>
+          <td colspan="6" class="empty-cell">Loading books...</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
+@if (showModal) {
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>{{ isEditMode ? 'Edit Book' : 'Add New Book' }}</h3>
+      <button class="icon-btn" (click)="closeModal()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="saveBook()" #bookForm="ngForm" class="form-grid">
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Title</label>
+          <input type="text" class="form-input" [(ngModel)]="newBook.title" name="title" required>
+        </div>
+        <div class="form-group">
+          <label>Author</label>
+          <input type="text" class="form-input" [(ngModel)]="newBook.author" name="author" required>
+        </div>
+        <div class="form-group">
+          <label>Genre / Category</label>
+          <select class="form-input" [(ngModel)]="newBook.genre" name="genre" required>
+            @for (g of genres; track g) {
+            <option [value]="g">{{ g }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Price (₹)</label>
+          <input type="number" class="form-input" [(ngModel)]="newBook.price" name="price" required min="0">
+        </div>
+        <div class="form-group">
+          <label>Stock</label>
+          <input type="number" class="form-input" [(ngModel)]="newBook.stock" name="stock" required min="0">
+        </div>
+        <div class="form-group">
+          <label>ISBN</label>
+          <input type="text" class="form-input" [(ngModel)]="newBook.isbn" name="isbn">
+        </div>
+        <div class="form-group">
+          <label>Publisher</label>
+          <input type="text" class="form-input" [(ngModel)]="newBook.publisher" name="publisher">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Cover Image URL</label>
+          <input type="text" class="form-input" [(ngModel)]="newBook.coverImageUrl" name="coverImageUrl"
+            placeholder="Paste a single image URL (e.g. https://...)">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Upload Images from Device (multiple allowed)</label>
+          <input type="file" class="form-input" accept="image/*" multiple (change)="onFilesSelected($event)"
+            style="padding: 8px;">
+          @if (imagePreviewUrls.length > 0) {
+          <div class="image-previews">
+            @for (url of imagePreviewUrls; track url; let i = $index) {
+            <div class="preview-item">
+              <img [src]="url" alt="Preview">
+              <button type="button" class="remove-preview-btn" (click)="removePreviewImage(i)" title="Remove">×</button>
+              @if (i === 0 && !isEditMode) {
+              <span class="primary-badge">Cover</span>
+              }
+            </div>
+            }
+          </div>
+          }
+          @if (uploadingImage) {
+          <p style="color: var(--primary); font-size: 12px; margin-top: 4px;">Uploading images...</p>
+          }
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Description</label>
+          <textarea class="form-input" [(ngModel)]="newBook.description" name="description" rows="3"></textarea>
+        </div>
+        <div class="form-group" style="grid-column: span 2; display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" [(ngModel)]="newBook.featured" name="featured" id="featuredCheck"
+            style="width: 18px; height: 18px; cursor: pointer;">
+          <label for="featuredCheck" style="margin: 0; cursor: pointer;">Mark as Featured Book</label>
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <button type="submit" class="btn btn-primary" style="width: 100%;"
+            [disabled]="!bookForm.form.valid || uploadingImage">
+            {{ uploadingImage ? 'Saving...' : (isEditMode ? 'Update Book' : 'Save Book') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+}

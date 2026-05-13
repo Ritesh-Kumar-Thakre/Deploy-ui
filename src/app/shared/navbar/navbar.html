@@ -1,0 +1,72 @@
+<nav class="navbar">
+  <div class="nav-content">
+    <a routerLink="/" class="logo">
+      <span class="material-symbols-outlined">menu_book</span>
+      <span class="logo-text">BookNest</span>
+    </a>
+
+
+    <div class="nav-actions">
+      <div class="nav-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a routerLink="/books" routerLinkActive="active">Browse</a>
+      </div>
+      <div class="nav-search-bar desktop-search">
+        <span class="material-symbols-outlined" style="color: #888; font-size: 20px; margin-right: 8px;">search</span>
+        <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Search books...">
+      </div>
+      <div class="mobile-nav-links">
+        <a routerLink="/" class="nav-icon" title="Home"><span class="material-symbols-outlined">home</span></a>
+        <a routerLink="/books" class="nav-icon" title="Browse"><span class="material-symbols-outlined">explore</span></a>
+      </div>
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/wishlist" class="nav-icon" title="Wishlist">
+          <span class="material-symbols-outlined">favorite</span>
+        </a>
+        <a routerLink="/cart" class="nav-icon" title="Cart">
+          <span class="material-symbols-outlined">shopping_cart</span>
+          @if ((cart.cartCount$ | async)! > 0) {
+            <span class="badge">{{ cart.cartCount$ | async }}</span>
+          }
+        </a>
+        <a routerLink="/notifications" class="nav-icon" title="Notifications">
+          <span class="material-symbols-outlined">notifications</span>
+          @if ((notification.unreadCount$ | async)! > 0) {
+            <span class="badge">{{ notification.unreadCount$ | async }}</span>
+          }
+        </a>
+        <a routerLink="/wallet" class="nav-icon" title="Wallet">
+          <span class="material-symbols-outlined">account_balance_wallet</span>
+        </a>
+        <div class="profile-menu">
+          <button class="nav-icon" (click)="toggleMenu()">
+            <span class="material-symbols-outlined">person</span>
+          </button>
+          @if (menuOpen) {
+            <div class="dropdown">
+              @if (isAdmin()) {
+                <a routerLink="/admin" (click)="menuOpen=false">Admin Panel</a>
+              }
+              @if (auth.getRole() === 'SELLER') {
+                <a routerLink="/seller" (click)="menuOpen=false">Seller Dashboard</a>
+              }
+              <a routerLink="/profile" (click)="menuOpen=false">Profile</a>
+              <a routerLink="/orders" (click)="menuOpen=false">My Orders</a>
+              <a (click)="onLogout()">Logout</a>
+            </div>
+          }
+        </div>
+      } @else {
+        <a routerLink="/login" class="btn btn-secondary" style="padding:8px 20px; font-size: 14px;">Login</a>
+        <a routerLink="/register" class="btn btn-secondary" style="padding:8px 20px; font-size: 14px;">Register</a>
+      }
+    </div>
+  </div>
+  
+  <div class="mobile-search-container">
+    <div class="nav-search-bar">
+      <span class="material-symbols-outlined" style="color: #888; font-size: 20px; margin-right: 8px;">search</span>
+      <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Search books...">
+    </div>
+  </div>
+</nav>

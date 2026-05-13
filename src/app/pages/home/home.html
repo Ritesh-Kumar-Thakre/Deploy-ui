@@ -1,0 +1,137 @@
+<!-- Hero -->
+<section class="hero">
+  <div class="container hero-layout">
+    <div class="hero-content">
+      <h1 class="headline-xl" style="color: white;">Discover Your Next<br><span style="color: var(--secondary-container);">Great Read</span></h1>
+      <p class="body-lg hero-sub">Browse thousands of books across every genre. From bestsellers to hidden gems, your next adventure awaits.</p>
+      <div class="hero-actions">
+      <a routerLink="/books" class="btn btn-secondary" style="padding: 14px 36px; font-size: 16px;">Explore Collection</a>
+      <a routerLink="/search" class="btn btn-outline hero-search-btn">
+        <span class="material-symbols-outlined" style="font-size:20px">search</span>
+        Search Books
+      </a>
+      </div>
+    </div>
+    <div class="hero-image"> 
+      <img src="homeImage.png" alt="Books">
+    </div>
+  </div>
+</section>
+<section class="container section">
+  <h2 class="headline-md">Browse by Genre</h2>
+  <div class="genre-chips">
+    @for (g of genres; track g) {
+      <a [routerLink]="['/books']" [queryParams]="{genre: g}" class="chip">{{ g }}</a>
+    }
+  </div>
+</section>
+
+<!-- Auto-Scrolling Most Popular Carousel -->
+<section class="section carousel-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2 class="headline-md">Most Popular Books</h2>
+        <p class="label-sm" style="color: var(--on-surface-variant); margin-top: 4px;">Top rated titles currently trending in our community</p>
+      </div>
+      <a routerLink="/books" class="btn btn-ghost">Explore All →</a>
+    </div>
+  </div>
+  
+  <div class="carousel-container">
+    <div class="carousel-track">
+      <!-- We duplicate the array in the template to create a seamless loop effect -->
+      @for (book of mostOrdered; track book.bookId) {
+        <a [routerLink]="['/books', book.bookId]" class="card book-card carousel-card">
+          <div class="book-cover">
+            @if (book.coverImageUrl) { <img [src]="book.coverImageUrl" [alt]="book.title" loading="lazy" referrerpolicy="no-referrer"> }
+            @else { <div class="cover-placeholder"><span class="material-symbols-outlined">book</span></div> }
+          </div>
+          <div class="book-info">
+            <h3 class="label-md">{{ book.title }}</h3>
+            <p class="label-sm" style="color:var(--on-surface-variant)">{{ book.author }}</p>
+          </div>
+        </a>
+      }
+      <!-- Duplicate set for seamless scrolling -->
+      @for (book of mostOrdered; track 'dup-'+book.bookId) {
+        <a [routerLink]="['/books', book.bookId]" class="card book-card carousel-card">
+          <div class="book-cover">
+            @if (book.coverImageUrl) { <img [src]="book.coverImageUrl" [alt]="book.title" loading="lazy" referrerpolicy="no-referrer"> }
+            @else { <div class="cover-placeholder"><span class="material-symbols-outlined">book</span></div> }
+          </div>
+          <div class="book-info">
+            <h3 class="label-md">{{ book.title }}</h3>
+            <p class="label-sm" style="color:var(--on-surface-variant)">{{ book.author }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+<section class="container section">
+  <div class="section-header">
+    <h2 class="headline-md">Featured Books</h2>
+    <a routerLink="/books" class="btn btn-ghost">View All →</a>
+  </div>
+  <div class="book-grid">
+    @for (book of featured; track book.bookId) {
+      <a [routerLink]="['/books', book.bookId]" class="card book-card">
+        <div class="book-cover">
+          @if (book.coverImageUrl) { <img [src]="book.coverImageUrl" [alt]="book.title" loading="lazy" referrerpolicy="no-referrer"> }
+          @else { <div class="cover-placeholder"><span class="material-symbols-outlined">book</span></div> }
+        </div>
+        <div class="book-info">
+          <h3 class="label-md">{{ book.title }}</h3>
+          <p class="label-sm" style="color:var(--on-surface-variant)">{{ book.author }}</p>
+          <div class="book-meta">
+            <span class="price">₹{{ book.price }}</span>
+            @if (book.rating) { <span class="stars"><span class="material-symbols-outlined">star</span>{{ book.rating }}</span> }
+          </div>
+        </div>
+      </a>
+    }
+    @if (featured.length === 0) {
+      @for (i of [1,2,3,4]; track i) {
+        <div class="card book-card">
+          <div class="skeleton" style="height:200px"></div>
+          <div style="padding:12px"><div class="skeleton" style="height:16px;width:80%;margin-bottom:8px"></div><div class="skeleton" style="height:12px;width:60%"></div></div>
+        </div>
+      }
+    }
+  </div>
+</section>
+
+<!-- Discover Books (Random) -->
+<section class="container section">
+  <div class="section-header">
+    <h2 class="headline-md">Discover Books</h2>
+    <a routerLink="/books" class="btn btn-ghost">View All Catalog →</a>
+  </div>
+  <div class="book-grid">
+    @for (book of discoverBooks; track book.bookId) {
+      <a [routerLink]="['/books', book.bookId]" class="card book-card">
+        <div class="book-cover">
+          @if (book.coverImageUrl) { <img [src]="book.coverImageUrl" [alt]="book.title" loading="lazy" referrerpolicy="no-referrer"> }
+          @else { <div class="cover-placeholder"><span class="material-symbols-outlined">book</span></div> }
+        </div>
+        <div class="book-info">
+          <h3 class="label-md">{{ book.title }}</h3>
+          <p class="label-sm" style="color:var(--on-surface-variant)">{{ book.author }}</p>
+          <div class="book-meta">
+            <span class="price">₹{{ book.price }}</span>
+            @if (book.rating) { <span class="stars"><span class="material-symbols-outlined">star</span>{{ book.rating }}</span> }
+          </div>
+        </div>
+      </a>
+    }
+    @if (discoverBooks.length === 0) {
+      @for (i of [1,2,3,4]; track i) {
+        <div class="card book-card">
+          <div class="skeleton" style="height:200px"></div>
+          <div style="padding:12px"><div class="skeleton" style="height:16px;width:80%;margin-bottom:8px"></div><div class="skeleton" style="height:12px;width:60%"></div></div>
+        </div>
+      }
+    }
+  </div>
+</section>

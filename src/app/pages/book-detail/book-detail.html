@@ -1,0 +1,179 @@
+@if (book) {
+  <div class="container detail-page">
+    <div class="detail-grid">
+      <div class="cover-section">
+        <div class="main-image-container">
+          @if (selectedImage) { <img [src]="selectedImage" [alt]="book.title" class="cover-img" referrerpolicy="no-referrer"> }
+          @else if (book.coverImageUrl) { <img [src]="getImageUrl(book.coverImageUrl)" [alt]="book.title" class="cover-img" referrerpolicy="no-referrer"> }
+          @else { <div class="cover-placeholder"><span class="material-symbols-outlined">book</span></div> }
+        </div>
+        <!-- Image Gallery Thumbnails -->
+        @if (bookImages.length > 0 || book.coverImageUrl) {
+          <div class="image-gallery">
+            @if (book.coverImageUrl) {
+              <div class="thumb" [class.active]="selectedImage === getImageUrl(book.coverImageUrl)" (click)="selectImage(book.coverImageUrl)">
+                <img [src]="getImageUrl(book.coverImageUrl)" [alt]="book.title" referrerpolicy="no-referrer">
+              </div>
+            }
+            @for (img of bookImages; track img.id) {
+              @if (img.imageUrl) {
+                <div class="thumb" [class.active]="selectedImage === getImageUrl(img.imageUrl)" (click)="selectImage(img.imageUrl)">
+                  <img [src]="getImageUrl(img.imageUrl)" [alt]="book.title" referrerpolicy="no-referrer">
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+
+      <div class="info-section">
+        <h1 class="headline-lg">{{ book.title }}</h1>
+        <p class="author-line">by <span>{{ book.author }}</span></p>
+        <div class="rating-row">
+          <div class="stars">
+            @for (s of [1,2,3,4,5]; track s) {
+              <span class="material-symbols-outlined" [style.font-variation-settings]="getRatingFill(s, book.rating)">star</span>
+            }
+          </div>
+          <span class="body-md">{{ book.rating || 0 }} / 5</span>
+        </div>
+
+        <div class="meta-chips" style="margin-top: 16px;">
+          @if (book.genre) { <span class="chip">{{ book.genre }}</span> }
+          @if (book.publisher) { <span class="chip">{{ book.publisher }}</span> }
+          @if (book.isbn) { <span class="chip">ISBN: {{ book.isbn }}</span> }
+        </div>
+
+        <!-- Price & Stock Section -->
+        <div class="price-stock-row">
+          <div class="price-block">
+            <p class="price-tag">₹{{ book.price }}</p>
+            <span class="tax-note">Inclusive of all taxes</span>
+          </div>
+          <div class="stock-badge" [class.in-stock]="book.stock > 0" [class.out-of-stock]="book.stock < 1">
+            @if (book.stock > 0) {
+              <span class="material-symbols-outlined" style="font-size:18px">check_circle</span>
+              In Stock
+            } @else {
+              <span class="material-symbols-outlined" style="font-size:18px">error</span>
+              Out of Stock
+            }
+          </div>
+        </div>
+
+        <!-- Quantity + Add to Cart + Wishlist -->
+        <div class="cart-actions-row">
+          <div class="qty-selector">
+            <button class="qty-btn" (click)="changeQty(-1)" [disabled]="quantity <= 1">−</button>
+            <span class="qty-value">{{ quantity }}</span>
+            <button class="qty-btn" (click)="changeQty(1)" [disabled]="book.stock < 1 || quantity >= book.stock">+</button>
+          </div>
+          <button class="btn-add-to-cart" (click)="addToCart()" [disabled]="book.stock < 1">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            {{ book.stock < 1 ? 'Out of Stock' : 'Add to Cart' }}
+          </button>
+          <button class="btn-wishlist-icon" (click)="toggleWishlist()" [class.active]="inWishlist" [title]="inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'">
+            <span class="material-symbols-outlined" [style.font-variation-settings]="inWishlist ? &quot;'FILL' 1&quot; : &quot;'FILL' 0&quot;">bookmark</span>
+          </button>
+        </div>
+
+        @if (book.stock > 0 && book.stock <= 5) {
+          <p class="low-stock-warn">
+            <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle">warning</span>
+            Only {{ book.stock }} left in stock — order soon!
+          </p>
+        }
+
+        <!-- Feature Badges -->
+        <div class="feature-badges">
+          <div class="feature-badge">
+            <span class="material-symbols-outlined">local_shipping</span>
+            <span>Free Delivery</span>
+          </div>
+          <div class="feature-badge">
+            <span class="material-symbols-outlined">menu_book</span>
+            <span>Premium Print</span>
+          </div>
+          <div class="feature-badge">
+            <span class="material-symbols-outlined">block</span>
+            <span>No Return</span>
+          </div>
+        </div>
+
+        <section class="about-book-section">
+          <h2 class="headline-md" style="font-size: 20px; margin-bottom: 12px;">About Book</h2>
+          <div class="about-content card">
+            <div class="body-md description-text">{{ book.description || 'No description available for this book.' }}</div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <section class="reviews-section">
+      <h2 class="headline-md">Reviews</h2>
+      @if (auth.isLoggedIn()) {
+        <form (ngSubmit)="submitReview()" class="review-form card">
+          <div class="star-input">
+            @for (s of [1,2,3,4,5]; track s) {
+              <span class="material-symbols-outlined" (click)="newReview.rating = s" [style.font-variation-settings]="getRatingFill(s, newReview.rating)" style="cursor:pointer;font-size:28px">star</span>
+            }
+          </div>
+          <textarea class="form-input" [(ngModel)]="newReview.comment" name="comment" placeholder="Write your review..." rows="3"></textarea>
+          <button type="submit" class="btn btn-primary" [disabled]="newReview.rating === 0">Submit Review</button>
+        </form>
+      }
+      <div class="reviews-list">
+        @for (r of reviews; track r.reviewId) {
+          <div class="review-card card">
+            @if (editingReviewId === r.reviewId) {
+              <!-- Edit Mode -->
+              <div class="review-edit-mode">
+                <div class="star-input">
+                  @for (s of [1,2,3,4,5]; track s) {
+                    <span class="material-symbols-outlined" (click)="editReview.rating = s" [style.font-variation-settings]="getRatingFill(s, editReview.rating)" style="cursor:pointer;font-size:24px">star</span>
+                  }
+                </div>
+                <textarea class="form-input" [(ngModel)]="editReview.comment" rows="3"></textarea>
+                <div class="review-edit-actions">
+                  <button class="btn btn-primary" style="padding:8px 20px;font-size:13px" (click)="saveEdit(r)">Save</button>
+                  <button class="btn btn-outline" style="padding:8px 20px;font-size:13px" (click)="cancelEdit()">Cancel</button>
+                </div>
+              </div>
+            } @else {
+              <!-- Display Mode -->
+              <div class="review-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div class="reviewer-avatar">{{ getInitial(r.reviewerName) }}</div>
+                  <div>
+                    <span class="label-md" style="color: var(--on-surface); font-weight: 600;">{{ r.reviewerName || 'Anonymous' }}</span>
+                    <div class="stars" style="font-size:14px; margin-top: 2px;">
+                      @for (s of [1,2,3,4,5]; track s) {
+                        <span class="material-symbols-outlined" [style.font-variation-settings]="getRatingFill(s, r.rating)" style="font-size:16px">star</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div class="review-actions-row">
+                  <span class="label-sm" style="color:var(--on-surface-variant)">{{ r.createdAt | date:'mediumDate' }}</span>
+                  @if (isOwnReview(r)) {
+                    <button class="review-action-btn" title="Edit" (click)="startEdit(r)">
+                      <span class="material-symbols-outlined">edit</span>
+                    </button>
+                    <button class="review-action-btn delete" title="Delete" (click)="deleteReview(r)">
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
+                  } @else if (isAdmin()) {
+                    <button class="review-action-btn delete" title="Delete (Admin)" (click)="deleteReview(r)">
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
+                  }
+                </div>
+              </div>
+              <p class="body-md" style="margin-top: 8px;">{{ r.comment }}</p>
+            }
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+}

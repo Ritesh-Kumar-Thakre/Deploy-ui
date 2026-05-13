@@ -1,0 +1,40 @@
+.success-page {
+  text-align: center;
+  padding: 80px 0;
+}
+.success-icon {
+  font-size: 80px;
+  color: #2e7d32;
+  font-variation-settings: 'FILL' 1;
+}
+.success-page h1 {
+  margin: 16px 0;
+}
+.success-actions {
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .success-page {
+    padding: 40px 16px;
+  }
+  .success-icon {
+    font-size: 64px;
+  }
+  .success-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .success-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+@media (max-width: 360px) {
+  .success-page h1 {
+    font-size: 24px;
+  }
+}

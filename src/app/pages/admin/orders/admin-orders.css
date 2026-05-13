@@ -1,0 +1,126 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.page-header h2 {
+  margin: 0 0 8px;
+  color: var(--primary-container);
+}
+.text-muted {
+  color: var(--on-surface-variant);
+}
+
+.card {
+  background: var(--surface-container-lowest);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--outline-variant);
+  overflow: hidden;
+}
+
+/* Table */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.admin-table th {
+  padding: 16px 24px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+  background: var(--surface-container-low);
+  border-bottom: 1px solid var(--outline-variant);
+}
+.admin-table td {
+  padding: 16px 24px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--outline-variant);
+  vertical-align: middle;
+}
+.admin-table tr:hover td {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.address-cell {
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  line-height: 1.4;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty-cell {
+  text-align: center;
+  color: var(--outline);
+  padding: 48px !important;
+}
+
+/* Status Select */
+.status-select {
+  padding: 6px 12px 6px 16px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--outline-variant);
+  outline: none;
+  cursor: pointer;
+  appearance: auto;
+}
+.status-select.delivered {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+.status-select.processing {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+.status-select.pending {
+  background: #fef9c3;
+  color: #854d0e;
+  border-color: #fde047;
+}
+.status-select.shipped {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border-color: #e9d5ff;
+}
+.status-select.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.status-select:focus {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+@media (max-width: 480px) {
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .address-cell {
+    max-width: 150px;
+  }
+}
+@media (max-width: 360px) {
+  .card {
+    border-radius: 8px;
+  }
+}

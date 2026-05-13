@@ -1,0 +1,129 @@
+<div class="auth-page">
+  <div class="auth-card card">
+    <div class="auth-header">
+      <span class="material-symbols-outlined" style="font-size:40px;color:var(--secondary-container)">menu_book</span>
+      <h1 class="headline-md">Create Account</h1>
+      <p class="body-md" style="color:var(--on-surface-variant)">Join BookNest today</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form" autocomplete="off">
+
+      <!-- Full Name -->
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" formControlName="fullName" placeholder="John Doe"
+               [class.input-error]="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched">
+        @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.hasError('required')) {
+          <span class="field-error">Full name is required</span>
+        }
+        @if (registerForm.get('fullName')?.touched && registerForm.get('fullName')?.hasError('minlength')) {
+          <span class="field-error">Name must be at least 2 characters</span>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" formControlName="email" placeholder="you&#64;example.com"
+               [class.input-error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" autocomplete="off">
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')) {
+          <span class="field-error">Email is required</span>
+        }
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('pattern')) {
+          <span class="field-error">Please enter a valid email address</span>
+        }
+      </div>
+
+      <!-- Mobile -->
+      <div class="form-group">
+        <label class="form-label">Mobile</label>
+        <input type="tel" class="form-input" formControlName="mobile" placeholder="9876543210"
+               [class.input-error]="registerForm.get('mobile')?.invalid && registerForm.get('mobile')?.touched">
+        @if (registerForm.get('mobile')?.touched && registerForm.get('mobile')?.hasError('required')) {
+          <span class="field-error">Mobile number is required</span>
+        }
+        @if (registerForm.get('mobile')?.touched && registerForm.get('mobile')?.hasError('pattern')) {
+          <span class="field-error">Enter a valid 10-digit mobile number</span>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="password-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'" class="form-input" formControlName="password"
+                 placeholder="Min 8 chars, mixed case, digit, special"
+                 [class.input-error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" autocomplete="new-password">
+          <button type="button" class="toggle-password" (click)="togglePassword()" tabindex="-1">
+            <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+          </button>
+        </div>
+
+        <!-- Password strength bar -->
+        @if (registerForm.get('password')?.value) {
+          <div class="strength-bar-wrapper">
+            <div class="strength-bar" [style.width.%]="passwordStrength" [style.background]="strengthColor"></div>
+          </div>
+          <span class="strength-label" [style.color]="strengthColor">{{ strengthLabel }}</span>
+        }
+
+        <!-- Password requirement checklist -->
+        @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+          <div class="password-rules">
+            @if (registerForm.get('password')?.hasError('minlength')) {
+              <span class="rule-item fail"><span class="material-symbols-outlined rule-icon">close</span> At least 8 characters</span>
+            } @else {
+              <span class="rule-item pass"><span class="material-symbols-outlined rule-icon">check</span> At least 8 characters</span>
+            }
+            @if (registerForm.get('password')?.hasError('noUppercase')) {
+              <span class="rule-item fail"><span class="material-symbols-outlined rule-icon">close</span> One uppercase letter</span>
+            } @else {
+              <span class="rule-item pass"><span class="material-symbols-outlined rule-icon">check</span> One uppercase letter</span>
+            }
+            @if (registerForm.get('password')?.hasError('noLowercase')) {
+              <span class="rule-item fail"><span class="material-symbols-outlined rule-icon">close</span> One lowercase letter</span>
+            } @else {
+              <span class="rule-item pass"><span class="material-symbols-outlined rule-icon">check</span> One lowercase letter</span>
+            }
+            @if (registerForm.get('password')?.hasError('noDigit')) {
+              <span class="rule-item fail"><span class="material-symbols-outlined rule-icon">close</span> One digit (0-9)</span>
+            } @else {
+              <span class="rule-item pass"><span class="material-symbols-outlined rule-icon">check</span> One digit (0-9)</span>
+            }
+            @if (registerForm.get('password')?.hasError('noSpecial')) {
+              <span class="rule-item fail"><span class="material-symbols-outlined rule-icon">close</span> One special character (!&#64;#$...)</span>
+            } @else {
+              <span class="rule-item pass"><span class="material-symbols-outlined rule-icon">check</span> One special character (!&#64;#$...)</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Role Selection -->
+      <div class="form-group">
+        <label class="form-label">I want to register as a:</label>
+        <div style="display: flex; gap: 16px; margin-top: 4px;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="radio" formControlName="role" value="CUSTOMER">
+            <span>Customer</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="radio" formControlName="role" value="SELLER">
+            <span>Seller</span>
+          </label>
+        </div>
+      </div>
+
+      @if (error) {
+        <p class="form-error">{{ error }}</p>
+      }
+
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:14px"
+              [disabled]="loading">
+        {{ loading ? 'Creating...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">Already have an account? <a routerLink="/login">Sign in</a></p>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+/* Auth Pages — Deep Navy glassmorphism */
+.auth-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: linear-gradient(135deg, #0d1f3c 0%, #1b2a4a 50%, #263d6a 100%);
+  position: relative;
+  overflow: hidden;
+}
+.auth-page::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(245, 166, 35, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.auth-page::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  right: -5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(176, 192, 232, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+  border-radius: 16px;
+}
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.auth-header h1 {
+  margin-top: 12px;
+  color: white;
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.auth-form .form-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+.auth-form .form-input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+.auth-form .form-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.auth-form .form-input:focus {
+  border-color: var(--secondary-container);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.2);
+}
+.auth-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.auth-footer a {
+  color: var(--secondary-container);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 32px 24px;
+  }
+  .auth-page {
+    padding: 32px 16px;
+  }
+}
+@media (max-width: 360px) {
+  .auth-card {
+    padding: 24px 16px;
+    border-radius: 12px;
+  }
+  .auth-header h1 {
+    font-size: 24px;
+  }
+  .auth-form {
+    gap: 16px;
+  }
+}

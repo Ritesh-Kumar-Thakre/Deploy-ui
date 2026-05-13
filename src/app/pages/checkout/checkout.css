@@ -1,0 +1,228 @@
+.section {
+  padding: 32px 0;
+}
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  margin-top: 24px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* Saved Address Card */
+.saved-address-card {
+  padding: 14px 18px;
+  border: 2px dashed var(--primary);
+  border-radius: 12px;
+  background: rgba(13, 31, 60, 0.03);
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.25s;
+}
+.saved-address-card:hover {
+  background: rgba(13, 31, 60, 0.07);
+  border-style: solid;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 31, 60, 0.1);
+}
+.saved-address-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.saved-address-text {
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  line-height: 1.5;
+  margin: 0;
+}
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 2px solid var(--outline-variant);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+}
+.payment-option:hover {
+  border-color: var(--primary);
+  background: rgba(108, 99, 255, 0.04);
+}
+.payment-option.selected {
+  border-color: var(--primary);
+  background: var(--primary-fixed);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.payment-option input[type='radio'] {
+  accent-color: var(--primary);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Payment icon */
+.payment-icon {
+  font-size: 24px;
+  color: var(--on-surface-variant);
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+.payment-option.selected .payment-icon {
+  color: var(--primary);
+}
+
+/* Payment info */
+.payment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.payment-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--on-surface);
+}
+.payment-desc {
+  font-size: 12px;
+  color: var(--on-surface-variant);
+}
+
+/* Razorpay-specific */
+.razorpay-option.selected {
+  background: linear-gradient(135deg, rgba(90, 79, 207, 0.08), rgba(33, 150, 243, 0.06));
+  border-color: #5a4fcf;
+}
+.razorpay-icon {
+  color: #5a4fcf !important;
+}
+.razorpay-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #5a4fcf, #2196f3);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* Razorpay info box in summary */
+.razorpay-info-box {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(90, 79, 207, 0.08), rgba(33, 150, 243, 0.05));
+  border: 1px solid rgba(90, 79, 207, 0.25);
+  border-radius: 0.5rem;
+  color: #5a4fcf;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+}
+.summary-item.total {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--primary);
+}
+hr {
+  border: none;
+  border-top: 1px solid var(--outline-variant);
+  margin: 12px 0;
+}
+
+/* Stock error warning */
+.stock-error-box {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 0.5rem;
+  color: #dc2626;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Place Order button */
+.place-order-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.place-order-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3);
+}
+
+/* Spinner for loading state */
+.spinner-sm {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .checkout-grid {
+    grid-template-columns: 1fr 320px;
+    gap: 24px;
+  }
+}
+@media (max-width: 768px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .saved-address-card {
+    padding: 12px 14px;
+  }
+  .payment-option {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .payment-icon {
+    margin-top: 2px;
+  }
+}

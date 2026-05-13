@@ -1,0 +1,7 @@
+<div class="toast-container">
+  @for (t of (toast.toasts$ | async); track t.id) {
+    <div class="toast" [class]="t.type" (click)="toast.remove(t.id)">
+      {{ t.message }}
+    </div>
+  }
+</div>

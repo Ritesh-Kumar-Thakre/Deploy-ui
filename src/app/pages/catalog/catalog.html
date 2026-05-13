@@ -1,0 +1,31 @@
+<div class="container section">
+    <h1 class="headline-lg">Browse Books</h1>
+    <div class="genre-chips" style="margin:20px 0"><button class="chip" [class.active]="!selectedGenre"
+            (click)="loadAll()">All</button>@for (g of genres; track g) { <button class="chip"
+            [class.active]="selectedGenre===g" (click)="filterGenre(g)">{{ g }}</button> }</div>
+    <div class="book-grid">@for (book of books; track book.bookId) { <a [routerLink]="['/books', book.bookId]"
+            class="card book-card" [class.out-of-stock-card]="book.stock === 0">
+            <div class="book-cover">@if (book.coverImageUrl) { <img [src]="book.coverImageUrl" [alt]="book.title"
+                    loading="lazy" referrerpolicy="no-referrer"> } @else { <div class="cover-placeholder"><span
+                        class="material-symbols-outlined">book</span></div> }
+                @if (book.stock === 0) {
+                  <div class="out-of-stock-overlay">Out of Stock</div>
+                }
+            </div>
+            <div class="book-info">
+                <h3 class="label-md">{{ book.title }}</h3>
+                <p class="label-sm" style="color:var(--on-surface-variant)">{{ book.author }}</p>
+                <div class="book-meta"><span class="price">₹{{ book.price }}</span>@if (book.rating) { <span
+                        class="rating"><span class="material-symbols-outlined">star</span>{{ book.rating }}</span> }
+                </div>
+                @if (book.stock === 0) {
+                  <p class="catalog-stock-label" style="color:#dc2626;font-size:12px;font-weight:700;margin-top:4px">Out of Stock</p>
+                } @else if (book.stock <= 5) {
+                  <p class="catalog-stock-label" style="color:#ea580c;font-size:12px;font-weight:600;margin-top:4px">Only {{ book.stock }} left</p>
+                }
+            </div>
+        </a> }</div>@if (books.length === 0 && !loading) { <div class="empty-state"><span
+            class="material-symbols-outlined" style="font-size:64px;color:var(--outline)">search_off</span>
+        <p class="body-lg">No books found</p>
+    </div> }
+</div>
