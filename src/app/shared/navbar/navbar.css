@@ -224,6 +224,10 @@
     display: none;
   }
   .mobile-search-container {
-    display: none;
-  } /* Hide search entirely on very small screens to save space */
+    display: block;
+    padding: 8px 12px;
+  }
+  .mobile-search-container .nav-search-bar {
+    padding: 6px 14px;
+  }
 }
